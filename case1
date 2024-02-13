@@ -1,0 +1,16 @@
+#!/bin/bash
+clear
+read  -p "Estas segur de continuar avançant?: " v1
+# No oblidis el doble punt-i-coma
+v2=0
+while [ $v2 == 0 ]
+do
+	case $v1 in
+		'exit')
+			v2=1
+			sudo xdg-open https://www.youtube.com/watch?v=jaLDoWqIq2M 
+		;;
+		*)
+			read  -p "Estas segur de continuar avançant?: " v1 ;;
+esac
+done
