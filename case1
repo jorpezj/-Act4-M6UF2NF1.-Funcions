@@ -1,7 +1,6 @@
 #!/bin/bash
 clear
 read  -p "Estas segur de continuar avançant?: " v1
-# No oblidis el doble punt-i-coma
 v2=0
 while [ $v2 == 0 ]
 do
