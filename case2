@@ -1,0 +1,43 @@
+#!/bin/bash
+if [ -z "$1" ];then
+	echo "No hi ha username."
+exit 1
+else
+	echo $1
+	cut -d ":" -f 1 /etc/passwd > passwd.txt
+	cut -d "	" -f 1 /etc/sudoers > sudoers.txt
+	cut -d ":" -f 6 /etc/passwd > directoris.txt
+	echo -e "Opció a escollir: \n 1.Comprobar drets admin \n 2.Usuari existent \n 3.Directori personal vàlid"
+	echo
+	read -p 'Num opció [1-3]: ' opcio
+	case $opcio in
+	1)
+		while read usuari3;
+                do
+                        if [[ $usuari3 == $1 ]];then
+                                echo 'Usuari Admin';
+                                cat /etc/sudoers | grep $1
+			else
+				echo 'Usuari no és admin'
+                        fi
+
+                done < sudoers.txt ;;
+
+	2)
+		while read usuari2;
+		do
+			if [[ $usuari2 == $1 ]];then
+				echo 'Usuari Vàlid';
+				cat /etc/passwd | grep $1
+			fi
+
+		done < passwd.txt ;;
+	3)
+		while read usuari4;
+                do
+                        if [[ $usuari4 == *$1 ]];then
+                                echo 'Directori Vàlid';
+                        fi
+                done < directoris.txt ;;
+	esac
+fi
