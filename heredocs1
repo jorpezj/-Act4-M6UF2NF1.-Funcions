@@ -1,0 +1,51 @@
+#!/bin/bash
+#Trap que printa a l'hora de fer CNTRL+C. No et treu del codi.
+trap "echo PRESS '4' TO EXIT" SIGINT
+connexio='False'
+#Per executar el codi, he utilitzat una IP 192.168.1.10/24.
+IP=192.168.1.10
+#Per analitzar una IP en concret, cal descomentar la següent linia.
+#read -p "Quina IP analitzar?:" $IP
+#bucle que fins que no aconsegueixi fer ping a 192.168.1.10, no acaba.
+while  [ $connexio != 'True' ];
+do
+	#si podem fer ping, la variable 'connexio' passa a ser 'True' i surt del bucle.
+	if  ping -c 1 $IP
+	then
+		connexio='True'
+	else
+		echo "Error de connexió!"
+	fi
+done
+#funció del menu que posteriorment cridarem
+menu () {
+	echo "------------"
+        echo "|1.Ports   |"
+        echo "|2.Sortir   |"
+        echo "------------"
+}
+sortir=''
+
+#bucle que mentre la variable 'sortir' no canvi, no acaba. per fer-ho l'usuari haura de premer el 4.
+while [[ $sortir != 'sortir' ]]
+do
+	if [ connexio != 'False' ];
+	then
+		menu
+		#input preguntant a l'usuari quina opció vol executar. En cas de premer una opció fora del rang
+		#se li torna a demanar l'input. 
+		read -p "Que vols analitzar?:" option
+		case $option in
+			#obrim connexió ssh contra la mv. Posteriorment mostrem informació del hardware.
+			'1')
+				ssh root@$IP <<- 'EOF'
+				lshw -short
+				free
+				EOF
+			;;
+			'2')
+				sortir='sortir'
+			;;
+	esac
+	fi
+done
